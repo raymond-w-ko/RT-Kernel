@@ -14,49 +14,16 @@ mkdir ~/kernel
 cd ~
 git clone --depth 1 --branch rpi-6.14.y https://github.com/raspberrypi/linux
 ```
-## *NEW: starting with linux kernel 6.12, the RT-patch is rolled onto the mainline codebase for ARM64 architexture (and some others), so no need to apply RT-patches anymore!*
 
-## Update if necessary while scrapping all your local stuff
-```bash
-git stash
-git pull --rebase
-#git stash clear
-```
-P.S.: If resetting and updating your local (git-) environment with the last two steps does not work for any reason, you can always run `sudo rm -rd ~/linux` to start from scratch @ https://github.com/by/RT-Kernel?tab=readme-ov-file#clone-the-git-in-this-case-kernel-612-from-from-httpsgithubcomraspberrypilinuxtreerpi-612y
-## Or simply pull
-```bash
-#git pull
-```
 ## Make for Raspberry Pi 5
 ```bash
 make bcm2712_defconfig
 ```
 ## Start menuconfig
 ```bash
+cp ~/src/RT-Kernel/bcm2712_config .config
 make menuconfig
 ```
-## Select General Setup/Preemption Model/Fully Preemptible Kernel (Real-Time)
-```bash
-## I've made the following changes specifically for my NTP server to also enable kernel PPS:
-sudo ~/linux/scripts/diffconfig ~/linux/arch/arm64/configs/bcm2712_defconfig ~/linux/defconfig
--CPU_FREQ_DEFAULT_GOV_ONDEMAND y
--CPU_FREQ_GOV_CONSERVATIVE y
--CPU_FREQ_GOV_POWERSAVE y
--CPU_FREQ_GOV_SCHEDUTIL y
--CPU_FREQ_GOV_USERSPACE y
--LEDS_TRIGGER_CPU y
--NO_HZ y
--PREEMPT y
- LOCALVERSION "-v8-16k" -> "-v8-16k-NTP"
- PPS_CLIENT_GPIO m -> y
-+CPU_FREQ_DEFAULT_GOV_PERFORMANCE y
-+EFI_DISABLE_RUNTIME n
-+HZ_1000 y
-+NTP_PPS y
-+PREEMPT_RT y
-+RTC_INTF_DEV_UIE_EMUL y
-```
-See also https://github.com/by/RT-Kernel/blob/main/bcm2712_defconfig_RT_NTP
 
 ## Build the kernel using all cores (and try gcc optimization level -O3, if you like)
 ```bash
@@ -66,18 +33,21 @@ sudo make -j6 modules_install # recommendation is 1.5 times the number of cores 
 ```
 ## Create the required directories once
 ```bash
-sudo mkdir /boot/firmware/NTP
-sudo mkdir /boot/firmware/NTP/overlays-NTP
+sudo mkdir /boot/firmware/RT
+sudo mkdir /boot/firmware/RT/overlays-RT
 ```
 ## Add this to /boot/firmware/config.txt in order to preserve the standard kernel
 ```bash
-os_prefix=NTP/
-overlay_prefix=overlays-NTP/
-kernel=/kernel_2712-NTP.img
+os_prefix=RT/
+overlay_prefix=overlays-RT/
+kernel=/kernel_2712-RT.img
 ```
 ## Copy the file ino the right directories
 ```bash
-sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/firmware/NTP/; sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/firmware/NTP/overlays-NTP/; sudo cp arch/arm64/boot/dts/overlays/README /boot/firmware/NTP/overlays-NTP/; sudo cp arch/arm64/boot/Image.gz /boot/firmware/kernel_2712-NTP.img
+sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/firmware/RT/
+sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/firmware/RT/overlays-RT/
+sudo cp arch/arm64/boot/dts/overlays/README /boot/firmware/RT/overlays-RT/
+sudo cp arch/arm64/boot/Image.gz /boot/firmware/kernel_2712-RT.img
 ```
 ## Reboot to activate the kernel
 ```bash
