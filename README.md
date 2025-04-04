@@ -53,7 +53,7 @@ sudo reboot now
 ```
 ## Update the firmware (but not the standard kernel)
 ```bash
-sudo SKIP_KERNEL=1 PRUNE_MODULES=1 rpi-update rpi-6.14.y
+sudo SKIP_KERNEL=1 PRUNE_MODULES=1 rpi-update master
 ```
 
 ## Build status for official rpi-6.14.y from https://github.com/raspberrypi/linux:
