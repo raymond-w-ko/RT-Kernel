@@ -7,10 +7,10 @@ sudo apt install git bc bison flex libssl-dev make
 sudo apt install libncurses5-dev
 sudo apt install raspberrypi-kernel-headers
 ```
-## Clone the git, in this case kernel 6.14, from from https://github.com/raspberrypi/linux/tree/rpi-6.14.y
+## Clone the git, in this case kernel 6.15, from from https://github.com/raspberrypi/linux/tree/rpi-6.15.y
 ```bash
 cd ~
-git clone --depth 1 --branch rpi-6.14.y https://github.com/raspberrypi/linux
+git clone --depth 1 --branch rpi-6.15.y https://github.com/raspberrypi/linux
 ```
 
 ## Make for Raspberry Pi 5
@@ -56,7 +56,7 @@ sudo reboot now
 sudo SKIP_KERNEL=1 PRUNE_MODULES=1 rpi-update master
 ```
 
-## Build status for official rpi-6.14.y from https://github.com/raspberrypi/linux:
-[![Pi kernel build tests](https://github.com/raspberrypi/linux/actions/workflows/kernel-build.yml/badge.svg?branch=rpi-6.14.y)](https://github.com/raspberrypi/linux/actions/workflows/kernel-build.yml)
+## Build status for official rpi-6.15.y from https://github.com/raspberrypi/linux:
+[![Pi kernel build tests](https://github.com/raspberrypi/linux/actions/workflows/kernel-build.yml/badge.svg?branch=rpi-6.15.y)](https://github.com/raspberrypi/linux/actions/workflows/kernel-build.yml)
 
-[![dtoverlaycheck](https://github.com/raspberrypi/linux/actions/workflows/dtoverlaycheck.yml/badge.svg?branch=rpi-6.14.y)](https://github.com/raspberrypi/linux/actions/workflows/dtoverlaycheck.yml)
+[![dtoverlaycheck](https://github.com/raspberrypi/linux/actions/workflows/dtoverlaycheck.yml/badge.svg?branch=rpi-6.15.y)](https://github.com/raspberrypi/linux/actions/workflows/dtoverlaycheck.yml)
